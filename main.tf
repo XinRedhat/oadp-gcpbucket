@@ -22,10 +22,6 @@ resource "google_service_account" "sa" {
   display_name = "Velero service account for bucket ${var.bucket}"
 }
 
-# output "sa_name" {
-#   value = google_service_account.sa.name
-# }
-
 resource "google_project_iam_custom_role" "velero_role" {
   role_id     = "${var.bucket}_role"
   title       = "${var.bucket} Velero Server"
@@ -39,16 +35,20 @@ resource "google_project_iam_custom_role" "velero_role" {
                  "compute.zones.get"]
 }
 
-output "role_name" {
-  value = google_project_iam_custom_role.velero_role.name
-}
-
-
 resource "google_project_iam_binding" "project" {
   project = var.project
-  role    = google_project_iam_custom_role.velero_role.role_id
+  role    = google_project_iam_custom_role.velero_role.name
 
   members = [
-    "serviceAccount:${google_project_iam_custom_role.velero_role.name}",
+    "serviceAccount:${google_service_account.sa.email}",
   ]
+}
+
+resource "google_service_account_key" "sa_key" {
+  service_account_id = google_service_account.sa.name
+}
+
+resource "local_file" "credentials-velero" {
+    content     = base64decode(google_service_account_key.sa_key.private_key)
+    filename = "credentials-velero"
 }
