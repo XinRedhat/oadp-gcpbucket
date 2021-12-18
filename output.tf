@@ -1,17 +1,7 @@
-# output "aws_secret_access_key" {
-#   value = aws_iam_access_key.velero.secret
-#   sensitive = true
-# }
+output "bucket_name" {
+  value = google_storage_bucket.bucket.name
+}
 
-# output "aws_access_key_id" {
-#   value = aws_iam_access_key.velero.id
-#   sensitive = true
-# }
-
-# output "bucket_name" {
-#   value = var.bucket
-# }
-
-# output "velero_user" {
-#   value = aws_iam_user.velero.name
-# }
+output "service_account" {
+  value = google_service_account.sa.account_id
+}

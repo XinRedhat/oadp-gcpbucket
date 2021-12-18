@@ -44,6 +44,12 @@ resource "google_project_iam_binding" "project" {
   ]
 }
 
+resource "google_storage_bucket_iam_member" "concurrent_iam" {
+  bucket = var.bucket
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.sa.email}"
+}
+
 resource "google_service_account_key" "sa_key" {
   service_account_id = google_service_account.sa.name
 }
