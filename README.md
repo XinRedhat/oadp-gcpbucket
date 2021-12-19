@@ -1,5 +1,8 @@
 # velero-gcpbucket
 
+This script is used to create a GCP bucket for OADP as backup storage. Regarding the detailed steps, you can refer to this [link](https://github.com/vmware-tanzu/velero-plugin-for-gcp).
+
+
 * Login to Google Cloud
 ```
 $ gcloud auth application-default login
@@ -12,8 +15,9 @@ $ ./create_bucket.sh <bucket name>  <project id>
 ```
 
 it will produce a secret file named `credentials-velero` after executing above command. And then you can apply it as secret for accessing the Google bucket storage by executing the following command
+
 ```
-oc create secret generic cloud-credentials-azure --namespace openshift-adp --from-file cloud=credentials-velero
+$ oc create secret generic cloud-credentials-azure --namespace openshift-adp --from-file cloud=credentials-velero
 ```
 
 * Delete GCP bucket
