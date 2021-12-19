@@ -16,8 +16,6 @@ fi
 bucket=$1
 project=$2
 
-bucket=$1
-
 terraform init
 
 terraform destroy -var bucket=$bucket -var project=$project -auto-approve
