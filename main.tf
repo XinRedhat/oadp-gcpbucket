@@ -2,6 +2,11 @@ provider "google" {
   project     = var.project
 }
 
+locals {
+  sa_name = "${var.bucket}-sa"
+  role_name = "${var.bucket}_role"
+}
+
 resource "google_storage_bucket" "bucket" {
   name = var.bucket
   location = "US"
@@ -18,12 +23,12 @@ resource "google_storage_bucket" "bucket" {
 }
 
 resource "google_service_account" "sa" {
-  account_id = "${var.bucket}-sa"
+  account_id = local.sa_name
   display_name = "Velero service account for bucket ${var.bucket}"
 }
 
 resource "google_project_iam_custom_role" "velero_role" {
-  role_id     = "${var.bucket}_role"
+  role_id     = local.role_name
   title       = "${var.bucket} Velero Server"
   permissions = ["compute.disks.get", 
                  "compute.disks.create", 
