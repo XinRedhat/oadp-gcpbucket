@@ -61,5 +61,16 @@ resource "google_service_account_key" "sa_key" {
 
 resource "local_file" "credentials-velero" {
     content     = base64decode(google_service_account_key.sa_key.private_key)
-    filename = "credentials-velero"
+    filename = "credentials-velero-gcp"
+}
+
+resource "local_file" "DPA_CR" {
+  content = templatefile("templates/dpa.yml.tpl",
+    {
+      bucket = google_storage_bucket.bucket.name
+      project = var.project
+      region = var.region
+    }
+  )
+  filename = "dpa.yml"
 }
